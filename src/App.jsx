@@ -20,7 +20,7 @@ const App = () => {
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/todos"
         );
-        const data = response.data;
+        const data = response.data.slice(0, 7); // Get only the first 7 tasks
         const formattedData = data.map((item) => ({
           id: uuidv4(), // Assign a unique ID
           task: item.title,
