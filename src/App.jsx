@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./App.css";
 import Taskform from "./components/Taskform";
 import TaskColumn from "./components/TaskColumn";
@@ -15,17 +16,21 @@ const App = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/todos"
-      );
-      const data = await response.json();
-      const formattedData = data.map((item) => ({
-        id: uuidv4(), // Assign a unique ID
-        task: item.title,
-        status: item.completed ? "done" : "todo",
-        tags: [HTML, CSS, JavaScript, React, Python], // tags adding
-      }));
-      setTasks(formattedData);
+      try {
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/todos"
+        );
+        const data = response.data;
+        const formattedData = data.map((item) => ({
+          id: uuidv4(), // Assign a unique ID
+          task: item.title,
+          status: item.completed ? "done" : "todo",
+          tags: ["HTML", "CSS", "JavaScript", "React", "Python"], // tags adding
+        }));
+        setTasks(formattedData);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
     };
 
     if (tasks.length === 0) {
